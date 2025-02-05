@@ -32,6 +32,8 @@ import org.maxgamer.quickshop.util.reload.ReloadStatus;
  */
 public class ChatListener extends AbstractQSListener {
 
+    private static final String LITEBANS_CANCELLED = "[event cancelled by Litebans]";
+
     public ChatListener(QuickShop plugin) {
         super(plugin);
     }
@@ -46,8 +48,14 @@ public class ChatListener extends AbstractQSListener {
         if (!plugin.getShopManager().getActions().containsKey(e.getPlayer().getUniqueId())) {
             return;
         }
-        // Fix stupid chat plugin will add a weird space before or after the number we want.
-        plugin.getShopManager().handleChat(e.getPlayer(), e.getMessage().trim());
+
+        // EarthMC start - litebans
+        String message = e.getMessage();
+        if (message.startsWith(LITEBANS_CANCELLED))
+            message = message.substring(LITEBANS_CANCELLED.length());
+
+        plugin.getShopManager().handleChat(e.getPlayer(), message.trim());
+        // EarthMC end
         e.setCancelled(true);
     }
 
