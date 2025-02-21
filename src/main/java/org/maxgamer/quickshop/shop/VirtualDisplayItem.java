@@ -401,7 +401,7 @@ public class VirtualDisplayItem extends AbstractDisplayItem {
                 //int data to mark
                 default:
                     //For 1.14+, we should use EntityType
-                    fakeItemPacket.getEntityTypeModifier().write(0, EntityType.DROPPED_ITEM);
+                    fakeItemPacket.getEntityTypeModifier().write(0, EntityType.ITEM);
                     if (VERSION.ordinal() < GameVersion.v1_19_R1.ordinal()) {
                         //int data to marking there have velocity (at last field)
                         integerStructureModifier.write(integerStructureModifier.getFields().size() - 1, 1);

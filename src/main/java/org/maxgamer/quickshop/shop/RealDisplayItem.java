@@ -170,7 +170,7 @@ public class RealDisplayItem extends AbstractDisplayItem {
         }
 
         for (Entity entity : elist) {
-            if (entity.getType() != EntityType.DROPPED_ITEM) {
+            if (entity.getType() != EntityType.ITEM) {
                 continue;
             }
             Item eItem = (Item) entity;

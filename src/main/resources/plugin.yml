@@ -45,7 +45,6 @@ softdepend:
   - Reserve
   - PlaceholderAPI
   - NoCheatPlus
-  - Spartan
   - LuckPerms
   - PermissionEx
   - GroupManager
@@ -71,7 +70,7 @@ softdepend:
   - FabledSkyblock
   - NBTAPI
 
-api-version: 1.15
+api-version: 1.20.5
 folia-supported: true
 
 commands:

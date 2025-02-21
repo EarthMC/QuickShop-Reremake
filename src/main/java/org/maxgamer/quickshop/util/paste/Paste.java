@@ -117,7 +117,7 @@ public class Paste {
         finalReport.append("\tName: ").append(plugin.getServer().getName()).append("\n");
         finalReport.append("\tServer Name: ").append(plugin.getServer().getName()).append("\n");
         finalReport.append("\tBuild: ").append(plugin.getServer().getVersion()).append("\n");
-        finalReport.append("\tNMSV: ").append(ReflectFactory.getNMSVersion()).append("\n");
+        finalReport.append("\tVersion: ").append(plugin.getServer().getMinecraftVersion()).append("\n");
         //noinspection deprecation
         finalReport.append("\tData Version: ").append(plugin.getServer().getUnsafe().getDataVersion()).append("\n");
         if (plugin.getEnvironmentChecker().isFabricBasedServer() || plugin.getEnvironmentChecker().isForgeBasedServer()) {

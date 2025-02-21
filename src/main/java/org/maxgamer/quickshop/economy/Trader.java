@@ -19,6 +19,7 @@
 
 package org.maxgamer.quickshop.economy;
 
+import io.papermc.paper.persistence.PersistentDataContainerView;
 import lombok.AllArgsConstructor;
 import org.bukkit.BanEntry;
 import org.bukkit.Bukkit;
@@ -264,6 +265,11 @@ public class Trader implements OfflinePlayer {
     @Override
     public Location getLocation() {
         return offlinePlayer.getLocation();
+    }
+
+    @Override
+    public PersistentDataContainerView getPersistentDataContainer() {
+        return offlinePlayer.getPersistentDataContainer();
     }
 
     @Nullable

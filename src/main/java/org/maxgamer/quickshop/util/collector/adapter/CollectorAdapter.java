@@ -95,7 +95,6 @@ public class CollectorAdapter {
         data.put("name", plugin.getServer().getName());
         data.put("software", plugin.getServer().getVersion());
         data.put("version", plugin.getServer().getVersion());
-        data.put("version_internal", ReflectFactory.getNMSVersion());
         data.put("version_data", plugin.getServer().getUnsafe().getDataVersion());
         data.put("online_mode", plugin.getServer().getOnlineMode());
         data.put("view_distance", plugin.getServer().getViewDistance());

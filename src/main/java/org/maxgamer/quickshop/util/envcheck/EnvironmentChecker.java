@@ -26,11 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import org.maxgamer.quickshop.QuickShop;
 import org.maxgamer.quickshop.api.shop.AbstractDisplayItem;
 import org.maxgamer.quickshop.api.shop.DisplayType;
-import org.maxgamer.quickshop.shop.VirtualDisplayItem;
-import org.maxgamer.quickshop.util.GameVersion;
 import org.maxgamer.quickshop.util.JsonUtil;
-import org.maxgamer.quickshop.util.MsgUtil;
-import org.maxgamer.quickshop.util.ReflectFactory;
 import org.maxgamer.quickshop.util.Util;
 import org.maxgamer.quickshop.util.security.JarVerifyTool;
 
@@ -340,27 +336,6 @@ public final class EnvironmentChecker {
         return new ResultContainer(CheckResult.PASSED, "Java is up-to-date: " + System.getProperty("java.version"));
     }
 
-    @EnvCheckEntry(name = "Spigot Based Server Test", priority = 2)
-    public ResultContainer spigotBasedServer() {
-        ResultContainer success = new ResultContainer(CheckResult.PASSED, "Server");
-        ResultContainer failed = new ResultContainer(CheckResult.STOP_WORKING, "Server must be Spigot based, Don't use CraftBukkit!");
-        try {
-            //API test
-            try {
-                plugin.getServer().spigot();
-                String nmsVersion = ReflectFactory.getNMSVersion();
-                plugin.getLogger().info("Running QuickShop-" + QuickShop.getFork() + " on NMS version " + nmsVersion + " For Minecraft version " + ReflectFactory.getServerVersion());
-            } catch (Throwable e) {
-                return failed;
-            }
-            return success;
-        } catch (Exception e) {
-            plugin.getLogger().log(Level.WARNING, "Failed to check Spigot API!" + plugin.getServer().getBukkitVersion() + " may not be Spigot based.");
-            return failed;
-        }
-
-    }
-
     @EnvCheckEntry(name = "Old QuickShop Test", priority = 3)
     public ResultContainer oldQuickShopTest() {
         if (Util.isClassAvailable("org.maxgamer.quickshop.Util.NMS")) {
@@ -401,57 +376,6 @@ public final class EnvironmentChecker {
             return new ResultContainer(CheckResult.WARNING, "No support will be given to modded servers.");
         }
         return new ResultContainer(CheckResult.PASSED, "Server is unmodified.");
-    }
-
-    @EnvCheckEntry(name = "CoreSupport Test", priority = 6)
-    public ResultContainer coreSupportTest() {
-        String nmsVersion = ReflectFactory.getNMSVersion();
-        GameVersion gameVersion = GameVersion.get(nmsVersion);
-        if (!gameVersion.isCoreSupports()) {
-            return new ResultContainer(CheckResult.STOP_WORKING, "Your Minecraft version is no longer supported: " + ReflectFactory.getServerVersion() + " (" + nmsVersion + ")");
-        }
-        if (gameVersion == GameVersion.UNKNOWN) {
-            return new ResultContainer(CheckResult.WARNING, "QuickShop may not fully support version " + nmsVersion + "/" + ReflectFactory.getServerVersion() + ", Some features may not work.");
-        }
-        return new ResultContainer(CheckResult.PASSED, "Passed checks");
-    }
-
-    @EnvCheckEntry(name = "Virtual DisplayItem Support Test", priority = 7)
-    public ResultContainer virtualDisplaySupportTest() {
-        String nmsVersion = ReflectFactory.getNMSVersion();
-        GameVersion gameVersion = GameVersion.get(nmsVersion);
-        Throwable throwable;
-        if (!gameVersion.isVirtualDisplaySupports()) {
-            throwable = new IllegalStateException("This game version " + gameVersion + " not supports Virtual DisplayItem.");
-        } else {
-            if (plugin.getServer().getPluginManager().getPlugin("ProtocolLib") != null) {
-                throwable = VirtualDisplayItem.PacketFactory.testFakeItem();
-            } else {
-                AbstractDisplayItem.setNotSupportVirtualItem(true);
-                return new ResultContainer(CheckResult.WARNING, "ProtocolLib is not installed, virtual DisplayItem seems will not work on your server.");
-            }
-        }
-        if (throwable != null) {
-            Util.debugLog(throwable.getMessage());
-            MsgUtil.debugStackTrace(throwable.getStackTrace());
-            AbstractDisplayItem.setNotSupportVirtualItem(true);
-            //do not throw
-            plugin.getLogger().log(Level.SEVERE, "Virtual DisplayItem Support Test: Failed to initialize VirtualDisplayItem", throwable);
-            return new ResultContainer(CheckResult.WARNING, "Virtual DisplayItem seems to not work on this Minecraft server, Make sure QuickShop, ProtocolLib and server builds are up to date.");
-        } else {
-            return new ResultContainer(CheckResult.PASSED, "Passed checks");
-        }
-    }
-
-
-    @EnvCheckEntry(name = "GameVersion supporting Test", priority = 9)
-    public ResultContainer gamerVersionSupportTest() {
-        String nmsVersion = ReflectFactory.getNMSVersion();
-        GameVersion gameVersion = GameVersion.get(nmsVersion);
-        if (gameVersion == GameVersion.UNKNOWN) {
-            return new ResultContainer(CheckResult.WARNING, "Your Minecraft server version not tested by developers, QuickShop may ran into issues on this version.");
-        }
-        return new ResultContainer(CheckResult.PASSED, "Passed checks");
     }
 
     @EnvCheckEntry(name = "PacketListenerAPI Conflict Test", priority = 10)

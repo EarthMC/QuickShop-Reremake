@@ -2323,7 +2323,6 @@ public class QuickShop extends JavaPlugin implements QuickShopAPI {
         quickShopCommand.setAliases(aliases);
         try {
             ReflectFactory.getCommandMap().register("qs", quickShopCommand);
-            ReflectFactory.syncCommands();
         } catch (Exception e) {
             getLogger().log(Level.WARNING, "Failed to register command aliases", e);
             return;
@@ -2387,9 +2386,6 @@ public class QuickShop extends JavaPlugin implements QuickShopAPI {
 
     @Override
     public GameVersion getGameVersion() {
-        if (gameVersion == null) {
-            gameVersion = GameVersion.get(ReflectFactory.getNMSVersion());
-        }
-        return this.gameVersion;
+        return GameVersion.v1_21_4;
     }
 }

@@ -177,8 +177,7 @@ public class BungeeQuickChat implements QuickChat {
             } else {
                 player.spigot().sendMessage(result);
             }
-        } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException |
-                 InstantiationException e) {
+        } catch (IllegalArgumentException e) { // dummy ex since reflectfactory no longer throws
             plugin.getLogger().log(Level.WARNING, "Failed to process chat component", e);
             player.spigot().sendMessage(errorComponent);
         }
