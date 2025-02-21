@@ -67,11 +67,6 @@ public class ReflectFactory {
 
     @Nullable
     public static String getMaterialMinecraftNamespacedKey(Material material) {
-        final ItemType itemType = material.asItemType();
-        if (itemType == null) {
-            return null;
-        }
-
-        return itemType.getKey().asString();
+        return material.isItem() ? material.getItemTranslationKey() : material.getBlockTranslationKey();
     }
 }

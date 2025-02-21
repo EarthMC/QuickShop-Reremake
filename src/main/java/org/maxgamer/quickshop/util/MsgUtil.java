@@ -636,7 +636,6 @@ public class MsgUtil {
             Util.debugLog("Content is null");
             Throwable throwable =
                     new Throwable("Known issue: Global Alert accepted null string, what the fuck");
-            plugin.getSentryErrorReporter().sendError(throwable, "NullCheck");
             return;
         }
         sendMessageToOps(content);

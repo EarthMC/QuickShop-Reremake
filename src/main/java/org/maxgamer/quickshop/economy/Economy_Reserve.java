@@ -96,7 +96,6 @@ public class Economy_Reserve extends AbstractEconomy {
         try {
             return Objects.requireNonNull(reserve).addHoldings(name, BigDecimal.valueOf(amount), world.getName(), currency);
         } catch (Exception throwable) {
-            plugin.getSentryErrorReporter().ignoreThrow();
             plugin.getLogger().log(Level.WARNING, errorMsg, throwable);
             return false;
         }
@@ -120,7 +119,6 @@ public class Economy_Reserve extends AbstractEconomy {
         try {
             return Objects.requireNonNull(reserve).format(BigDecimal.valueOf(balance), world.getName(), currency);
         } catch (Exception throwable) {
-            plugin.getSentryErrorReporter().ignoreThrow();
             plugin.getLogger().log(Level.WARNING, errorMsg, throwable);
             return formatInternal(balance);
         }
@@ -147,7 +145,6 @@ public class Economy_Reserve extends AbstractEconomy {
         try {
             return Objects.requireNonNull(reserve).getHoldings(name, world.getName(), currency).doubleValue();
         } catch (Exception throwable) {
-            plugin.getSentryErrorReporter().ignoreThrow();
             plugin.getLogger().log(Level.WARNING, errorMsg, throwable);
             return 0.0;
         }
@@ -174,7 +171,6 @@ public class Economy_Reserve extends AbstractEconomy {
         try {
             return Objects.requireNonNull(reserve).transferHoldings(from, to, BigDecimal.valueOf(amount), world.getName(), currency);
         } catch (Exception throwable) {
-            plugin.getSentryErrorReporter().ignoreThrow();
             plugin.getLogger().log(Level.WARNING, errorMsg, throwable);
             return false;
         }
@@ -192,7 +188,6 @@ public class Economy_Reserve extends AbstractEconomy {
         try {
             return Objects.requireNonNull(reserve).removeHoldings(name, BigDecimal.valueOf(amount));
         } catch (Exception throwable) {
-            plugin.getSentryErrorReporter().ignoreThrow();
             plugin.getLogger().log(Level.WARNING, errorMsg, throwable);
             return false;
         }

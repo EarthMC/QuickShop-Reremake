@@ -237,12 +237,6 @@
                             <shadedPattern>org.maxgamer.quickshop.shade.de.leonhard.storage.</shadedPattern>
                         </relocation>
                     </relocations>
-                    <transformers>
-                        <transformer
-                                implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                            <mainClass>org.maxgamer.quickshop.javaw.bootstrap.Bootstrap</mainClass>
-                        </transformer>
-                    </transformers>
                     <filters>
                         <filter>
                             <artifact>*:*</artifact>
@@ -704,11 +698,6 @@
             <systemPath>${project.basedir}/lib/BlocksHub-3.2.1.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>com.rollbar</groupId>
-            <version>1.10.0</version>
-            <artifactId>rollbar-java</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.github.PotatoCraft-Studio</groupId>
             <artifactId>MineDown</artifactId>
             <version>1.7.1-modified</version>
@@ -760,12 +749,6 @@
             <version>1.7.32</version>
             <scope>compile</scope>
         </dependency>
-        <!--        <dependency>-->
-        <!--            <groupId>com.github.simplix-softworks</groupId>-->
-        <!--            <artifactId>SimplixStorage</artifactId>-->
-        <!--            <version>3.1.9</version>-->
-        <!--            <scope>provided</scope>-->
-        <!--        </dependency>-->
         <dependency>
             <groupId>io.papermc</groupId>
             <artifactId>paperlib</artifactId>
@@ -800,12 +783,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!--        <dependency>-->
-        <!--            <groupId>com.github.alex9849.arm-shopbridge</groupId>-->
-        <!--            <artifactId>armshopbridge</artifactId>-->
-        <!--            <version>1.2.5</version>-->
-        <!--            <scope>provided</scope>-->
-        <!--        </dependency>-->
         <dependency>
             <groupId>com.github.alex9849</groupId>
             <artifactId>advanced-region-market</artifactId>

@@ -94,7 +94,6 @@ public class SubCommand_Paste implements CommandHandler<CommandSender> {
             sender.sendMessage("The paste was saved to " + file.getAbsolutePath());
             return true;
         } catch (IOException e) {
-            plugin.getSentryErrorReporter().ignoreThrow();
             plugin.getLogger().log(Level.WARNING, "Failed to save paste locally! The content will be send to the console", e);
             sender.sendMessage("Paste save failed! Sending paste to the console...");
             plugin.getLogger().info(pasteText);
