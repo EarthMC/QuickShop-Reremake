@@ -166,6 +166,11 @@ public final class PlayerFinder {
     @Nullable
     public static UUID findUUIDByName(String name, boolean includingBlockingWebReq, boolean checkOfflinePlayer) {
 
+        OfflinePlayer offline = Bukkit.getOfflinePlayerIfCached(name);
+        if (offline != null) {
+            return offline.getUniqueId();
+        }
+
         UUID uuid = name2UUIDCache.getIfPresent(name.toLowerCase(Locale.ROOT));
 
         if (uuid == null && useOfflineStash) {
