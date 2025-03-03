@@ -26,6 +26,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Registry;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -334,17 +335,14 @@ public class MsgUtil {
         potioni18n.setDefaults(defaultYaml);
         // Store it
         Util.parseColours(potioni18n);
-        for (PotionEffectType potion : PotionEffectType.values()) {
-            if (potion == null) {
-                continue;
-            }
-            String potionI18n = potioni18n.getString("potioni18n." + potion.getName());
+        for (PotionEffectType potion : Registry.POTION_EFFECT_TYPE) {
+            String potionI18n = potioni18n.getString("potioni18n." + potion.getKey().asMinimalString());
             if (potionI18n != null && !StringUtils.isEmpty(potionI18n)) {
                 continue;
             }
             String potionName = gameLanguage.getPotion(potion);
-            plugin.getLogger().info("Found new potion [" + potionName + "] , adding it to the config...");
-            potioni18n.set("potioni18n." + potion.getName(), potionName);
+            plugin.getLogger().info("Found new potion [" + potionName + "], adding it to the config...");
+            potioni18n.set("potioni18n." + potion.getKey().asMinimalString(), potionName);
         }
         try {
             potioni18n.save(potioni18nFile);
@@ -715,10 +713,8 @@ public class MsgUtil {
      * @param potion potionType
      * @return Potion's i18n name.
      */
-    @ApiStatus.ScheduledForRemoval
-    @Deprecated
     public static String getPotioni18n(@NotNull PotionEffectType potion) {
-        String potionString = potion.getName().trim();
+        String potionString = potion.getKey().asMinimalString().trim();
         if (potionString.isEmpty()) {
             return "Potion name is empty.";
         }

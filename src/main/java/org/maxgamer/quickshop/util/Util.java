@@ -22,6 +22,7 @@ package org.maxgamer.quickshop.util;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.EvictingQueue;
+import com.google.common.collect.Iterables;
 import de.themoep.minedown.MineDown;
 import de.themoep.minedown.MineDownParser;
 import io.papermc.lib.PaperLib;
@@ -58,6 +59,7 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.maxgamer.quickshop.QuickShop;
@@ -535,10 +537,11 @@ public class Util {
         }
         if (plugin.getConfig().getBoolean("shop.use-effect-for-potion-item") && itemStack.getType().name().endsWith("POTION")) {
             ItemMeta meta = itemStack.getItemMeta();
-            if (meta instanceof PotionMeta) {
-                PotionMeta potionMeta = (PotionMeta) meta;
-                PotionData potionData = potionMeta.getBasePotionData();
-                PotionEffectType potionEffectType = potionData.getType().getEffectType();
+            if (meta instanceof PotionMeta potionMeta && potionMeta.getBasePotionType() != null) {
+                PotionType potionType = potionMeta.getBasePotionType();
+                final PotionEffect firstEffect = Iterables.getFirst(potionType.getPotionEffects(), null);
+
+                PotionEffectType potionEffectType = firstEffect != null ? firstEffect.getType() : null;
                 if (potionEffectType != null) {
                     //Because the bukkit API limit, we can't get the actual effect level
                     return MsgUtil.getPotioni18n(potionEffectType);
