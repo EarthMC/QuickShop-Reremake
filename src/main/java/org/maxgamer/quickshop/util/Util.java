@@ -84,9 +84,8 @@ import java.time.LocalDateTime;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -107,12 +106,11 @@ import static org.maxgamer.quickshop.chat.platform.minedown.BungeeQuickChat.from
 import static org.maxgamer.quickshop.chat.platform.minedown.BungeeQuickChat.toLegacyText;
 
 public class Util {
-    private static final EnumSet<Material> BLACKLIST = EnumSet.noneOf(Material.class);
-    private static final EnumMap<Material, Entry<Double, Double>> RESTRICTED_PRICES = new EnumMap<>(Material.class);
-    private static final EnumMap<Material, Integer> CUSTOM_STACKSIZE = new EnumMap<>(Material.class);
-    private static final EnumSet<Material> SHOPABLES = EnumSet.noneOf(Material.class);
-    private static final List<BlockFace> VERTICAL_FACING = Collections.unmodifiableList(Arrays.asList(BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST));
-    @SuppressWarnings("UnstableApiUsage")
+    private static final Set<Material> BLACKLIST = new HashSet<>();
+    private static final Map<Material, Entry<Double, Double>> RESTRICTED_PRICES = new HashMap<>();
+    private static final Map<Material, Integer> CUSTOM_STACKSIZE = new HashMap<>();
+    private static final Set<Material> SHOPABLES = new HashSet<>();
+    private static final List<BlockFace> VERTICAL_FACING = List.of(BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST);
     private static final EvictingQueue<String> DEBUG_LOGS = EvictingQueue.create(500);
     private static final ReentrantReadWriteLock LOCK = new ReentrantReadWriteLock();
 
@@ -749,6 +747,14 @@ public class Util {
             Material mat = Material.getMaterial(s.toUpperCase());
             if (mat == null) {
                 mat = Material.matchMaterial(s);
+
+                // Final hope
+                if (mat == null) {
+                    final NamespacedKey key = NamespacedKey.fromString(s);
+                    if (key != null) {
+                        mat = Registry.MATERIAL.get(NamespacedKey.fromString(s));
+                    }
+                }
             }
             if (mat == null) {
                 plugin.getLogger().warning(s + " is not a valid material.  Check your spelling or ID");
