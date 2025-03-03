@@ -736,7 +736,7 @@ public class QuickShop extends JavaPlugin implements QuickShopAPI {
         if (shopManager != null) {
             shopManager.clear();
         }
-        if (AbstractDisplayItem.getNowUsing() == DisplayType.VIRTUALITEM) {
+        if (AbstractDisplayItem.getNowUsing() == DisplayType.VIRTUALITEM && this.display && Bukkit.getPluginManager().getPlugin("ProtocolLib") != null) {
             VirtualDisplayItem.VirtualDisplayItemManager.unload();
         }
 
