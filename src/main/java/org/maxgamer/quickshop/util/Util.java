@@ -750,9 +750,9 @@ public class Util {
 
                 // Final hope
                 if (mat == null) {
-                    final NamespacedKey key = NamespacedKey.fromString(s);
+                    final NamespacedKey key = NamespacedKey.fromString(s.toLowerCase(Locale.ROOT));
                     if (key != null) {
-                        mat = Registry.MATERIAL.get(NamespacedKey.fromString(s));
+                        mat = Registry.MATERIAL.get(key);
                     }
                 }
             }
