@@ -32,7 +32,7 @@ import org.maxgamer.quickshop.util.reload.ReloadStatus;
  */
 public class ChatListener extends AbstractQSListener {
 
-    private static final String LITEBANS_CANCELLED = "[event cancelled by Litebans]";
+    private static final String LITEBANS_CANCELLED = "[event cancelled by LiteBans]";
 
     public ChatListener(QuickShop plugin) {
         super(plugin);
