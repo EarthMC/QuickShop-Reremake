@@ -46,9 +46,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.maxgamer.quickshop.QuickShop;
@@ -1304,18 +1303,20 @@ public class SimpleShopManager implements ShopManager, Reloadable {
             chatSheetPrinter.printLine(plugin.text().of(p, "menu.this-shop-is-selling").forLocale());
         }
         MsgUtil.printEnchantment(p, shop, chatSheetPrinter);
-        if (items.getItemMeta() instanceof PotionMeta) {
-            PotionMeta potionMeta = (PotionMeta) items.getItemMeta();
-            PotionData potionData = potionMeta.getBasePotionData();
-            PotionEffectType potionEffectType = potionData.getType().getEffectType();
-            if (potionEffectType != null) {
-                chatSheetPrinter.printLine(plugin.text().of(p, "menu.effects").forLocale());
-                //Because the bukkit API limit, we can't get the actual effect level
-                chatSheetPrinter.printLine(ChatColor.YELLOW + MsgUtil.getPotioni18n(potionEffectType));
+        if (items.getItemMeta() instanceof PotionMeta potionMeta) {
+            final PotionType potionType = potionMeta.getBasePotionType();
+
+            final List<PotionEffect> effectsToPrint = new ArrayList<>();
+            if (potionType != null) {
+                effectsToPrint.addAll(potionType.getPotionEffects());
             }
-            if (potionMeta.hasCustomEffects()) {
-                for (PotionEffect potionEffect : potionMeta.getCustomEffects()) {
-                    // https://hub.spigotmc.org/jira/browse/SPIGOT-1697
+
+            effectsToPrint.addAll(potionMeta.getCustomEffects());
+
+            if (!effectsToPrint.isEmpty()) {
+                chatSheetPrinter.printLine(plugin.text().of(p, "menu.effects").forLocale());
+
+                for (PotionEffect potionEffect : effectsToPrint) {
                     // Internal api notes: amplifier starts from zero, so plus one to get the correct result
                     int level = potionEffect.getAmplifier() + 1;
                     chatSheetPrinter.printLine(ChatColor.YELLOW + MsgUtil.getPotioni18n(potionEffect.getType()) + " " + (level <= 10 ? RomanNumber.toRoman(potionEffect.getAmplifier()) : level));
