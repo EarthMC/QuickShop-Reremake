@@ -31,12 +31,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.map.MapView;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.maxgamer.quickshop.QuickShop;
 import org.maxgamer.quickshop.api.shop.ItemMatcher;
-import org.maxgamer.quickshop.util.ReflectFactory;
 import org.maxgamer.quickshop.util.Util;
 import org.maxgamer.quickshop.util.reload.ReloadResult;
 import org.maxgamer.quickshop.util.reload.ReloadStatus;
@@ -305,8 +305,7 @@ public class QuickShopItemMatcherImpl implements ItemMatcher, Reloadable {
                 if (meta1 instanceof PotionMeta != meta2 instanceof PotionMeta) {
                     return false;
                 }
-                if (meta1 instanceof PotionMeta) {
-                    PotionMeta potion1 = (PotionMeta) meta1;
+                if (meta1 instanceof PotionMeta potion1) {
                     PotionMeta potion2 = (PotionMeta) meta2;
 
                     if (potion1.hasColor() != potion2.hasColor()) {
@@ -319,23 +318,22 @@ public class QuickShopItemMatcherImpl implements ItemMatcher, Reloadable {
                     if (potion1.hasCustomEffects() != potion2.hasCustomEffects()) {
                         return false;
                     }
-                    if (potion1.hasCustomEffects() && !Arrays.deepEquals(potion1.getCustomEffects().toArray(), potion2.getCustomEffects().toArray())) {
+                    if (potion1.hasCustomEffects() && !potion1.getCustomEffects().equals(potion2.getCustomEffects())) {
                         return false;
                     }
 
-                    PotionData data1 = potion1.getBasePotionData();
-                    PotionData data2 = potion2.getBasePotionData();
+                    PotionType data1 = potion1.getBasePotionType();
+                    PotionType data2 = potion2.getBasePotionType();
 
-                    if (!data1.equals(data2)) {
+                    if (data1 == null != (data2 == null)) {
                         return false;
                     }
-                    if (!data2.getType().equals(data1.getType())) {
-                        return false;
+
+                    if (data1 == null) {
+                        return true; // both are null and therefore the same
                     }
-                    if (data1.isExtended() != data2.isExtended()) {
-                        return false;
-                    }
-                    return data1.isUpgraded() == data2.isUpgraded();
+
+                    return data1.getPotionEffects().equals(data2.getPotionEffects());
                 }
                 return true;
             }));
