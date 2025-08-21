@@ -59,8 +59,8 @@ import java.util.logging.Level;
 public class ShopProtectionListener extends AbstractProtectionListener {
 
     private boolean useEnhanceProtection;
-
     private boolean sendProtectionAlert;
+    private boolean protectHoppers;
 
     public ShopProtectionListener(@NotNull QuickShop plugin, @Nullable Cache cache) {
         super(plugin, cache);
@@ -69,7 +69,8 @@ public class ShopProtectionListener extends AbstractProtectionListener {
 
     private void init() {
         this.sendProtectionAlert = plugin.getConfig().getBoolean("send-shop-protection-alert", false);
-        useEnhanceProtection = plugin.getConfig().getBoolean("shop.enchance-shop-protect", true);
+        this.useEnhanceProtection = plugin.getConfig().getBoolean("shop.enchance-shop-protect", true);
+        this.protectHoppers = plugin.getConfig().getBoolean("protect.hopper", true);
         scanAndFixPaperListener();
     }
 
@@ -322,7 +323,7 @@ public class ShopProtectionListener extends AbstractProtectionListener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     public void onInventoryMove(InventoryMoveItemEvent event) {
-        if (!plugin.getConfig().getBoolean("protect.hopper")) {
+        if (!protectHoppers) {
             return;
         }
         final Location loc = event.getSource().getLocation();
@@ -344,7 +345,7 @@ public class ShopProtectionListener extends AbstractProtectionListener {
             return;
         }
 
-        final InventoryHolder holder = event.getInitiator().getHolder();
+        final InventoryHolder holder = event.getInitiator().getHolder(false);
 
         if (holder instanceof Entity) {
             ((Entity) holder).remove();
