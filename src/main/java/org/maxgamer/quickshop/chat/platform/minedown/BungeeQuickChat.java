@@ -20,6 +20,8 @@
 package org.maxgamer.quickshop.chat.platform.minedown;
 
 import lombok.AllArgsConstructor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -103,6 +105,10 @@ public class BungeeQuickChat implements QuickChat {
         }
         if (component.get() instanceof BaseComponent) {
             receiver.spigot().sendMessage((BaseComponent) component.get());
+            return;
+        }
+        if (component.get() instanceof Component adventureComponent) {
+            receiver.sendMessage(adventureComponent);
             return;
         }
         Util.debugLog("Illegal component " + component.get().getClass().getName() + " sending to " + this.getClass().getName() + " processor, trying force sending.");
@@ -189,40 +195,19 @@ public class BungeeQuickChat implements QuickChat {
     }
 
     private @NotNull QuickComponent getItemHologramChat(@NotNull Shop shop, @NotNull ItemStack itemStack, @NotNull Player player, @NotNull String message, boolean skipItemHoloChat) {
-        TextComponent errorComponent = new TextComponent(plugin.text().of(player, "menu.item-holochat-error").forLocale());
         try {
-            BungeeComponentBuilder builder;
-            if (skipItemHoloChat) {
-                builder = appendItemHoloChat(null, message);
-            } else {
-                builder = appendItemHoloChat(ReflectFactory.convertBukkitItemStackToJson(itemStack), message);
-            }
+            final net.kyori.adventure.text.TextComponent.Builder builder = Component.text().append(itemStack.effectiveName().hoverEvent(itemStack));
             if (QuickShop.getPermissionManager().hasPermission(player, "quickshop.preview")) {
                 //Skip the previous component, avoid it was applied with click event
-                builder.append(" ");
-                builder.event(new ClickEvent(
-                        ClickEvent.Action.RUN_COMMAND,
-                        MsgUtil.fillArgs(
-                                "/qs silentpreview {0}",
-                                shop.getRuntimeRandomUniqueId().toString())));
-                builder.appendLegacy(plugin.text().of(player, "menu.preview").forLocale());
+                builder.appendSpace();
+                builder.clickEvent(net.kyori.adventure.text.event.ClickEvent.runCommand("/qs silentpreview " + shop.getRuntimeRandomUniqueId()));
+                builder.append(LegacyComponentSerializer.legacySection().deserialize(plugin.text().of(player, "menu.preview").forLocale()));
 
             }
-            BaseComponent[] result = builder.create();
-            //The limit in vanilla server is 32767
-            if (ComponentSerializer.toString(result).getBytes(StandardCharsets.UTF_8).length > 32767) {
-                if (skipItemHoloChat) {
-                    //If still too large after skipItemHoloChat, just send the error message
-                    return new QuickComponentImpl(plugin.text().of(player, "menu.item-holochat-data-too-large").forLocale());
-                } else {
-                    return getItemHologramChat(shop, itemStack, player, message, true);
-                }
-            } else {
-                return new QuickComponentImpl(result);
-            }
+            return new QuickComponentImpl(builder.build());
         } catch (Exception t) {
             plugin.getLogger().log(Level.WARNING, "Failed to process chat component", t);
-            return new QuickComponentImpl(errorComponent);
+            return new QuickComponentImpl(new TextComponent(plugin.text().of(player, "menu.item-holochat-error").forLocale());
         }
     }
 
