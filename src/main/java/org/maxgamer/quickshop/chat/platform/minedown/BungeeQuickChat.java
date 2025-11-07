@@ -119,16 +119,15 @@ public class BungeeQuickChat implements QuickChat {
 
     @Override
     public void sendItemHologramChat(@NotNull Player player, @NotNull String text, @NotNull ItemStack itemStack) {
-        player.sendMessage(itemStack.effectiveName().hoverEvent(itemStack).append(LegacyComponentSerializer.legacySection().deserialize(text)));
+        player.sendMessage(LegacyComponentSerializer.legacySection().deserialize(text).hoverEvent(itemStack));
     }
 
     @Override
     public @NotNull QuickComponent getItemHologramChat(@NotNull Shop shop, @NotNull ItemStack itemStack, @NotNull Player player, @NotNull String message) {
         try {
-            final net.kyori.adventure.text.TextComponent.Builder builder = Component.text().append(itemStack.effectiveName().hoverEvent(itemStack)).append(LegacyComponentSerializer.legacySection().deserialize(message));
+            final net.kyori.adventure.text.TextComponent.Builder builder = LegacyComponentSerializer.legacySection().deserialize(message).hoverEvent(itemStack).toBuilder();
             if (QuickShop.getPermissionManager().hasPermission(player, "quickshop.preview")) {
                 //Skip the previous component, avoid it was applied with click event
-                builder.appendSpace();
                 builder.clickEvent(net.kyori.adventure.text.event.ClickEvent.runCommand("/qs silentpreview " + shop.getRuntimeRandomUniqueId()));
                 builder.append(LegacyComponentSerializer.legacySection().deserialize(plugin.text().of(player, "menu.preview").forLocale()));
 

@@ -225,8 +225,8 @@ public class MsgUtil {
     }
 
     public static String getTranslateText(ItemStack stack) {
-        if (plugin.getConfig().getBoolean("force-use-item-original-name") || !stack.hasItemMeta() || !stack.getItemMeta().hasDisplayName()) {
-            return convertItemStackToTranslateText(stack.getType());
+        if (plugin.getConfig().getBoolean("force-use-item-original-name")) {
+            return Util.getItemStackName(ItemStack.of(stack.getType(), stack.getAmount()));
         } else {
             return Util.getItemStackName(stack);
         }
