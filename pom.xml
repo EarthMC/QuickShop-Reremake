@@ -414,10 +414,6 @@
         <id>Sparky</id>
         <url>https://nexus.sparky.ac/repository/Sparky/</url>
         </repository>-->
-        <repository>
-            <id>songoda</id>
-            <url>https://repo.craftaro.com/repository/public/</url>
-        </repository>
         <!--MineDown -->
         <repository>
             <id>minebench-repo</id>
@@ -716,24 +712,6 @@
             <scope>system</scope>
             <version>0.1.1.17-PRE-2</version>
             <systemPath>${project.basedir}/lib/TNE-0.1.1.17-PRE-2.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>com.songoda</groupId>
-            <artifactId>skyblock</artifactId>
-            <version>2.3.30</version>
-            <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <artifactId>MVdWPlaceholderAPI</artifactId>
-                    <groupId>be.maximvdw</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.songoda</groupId>
-            <artifactId>SongodaCore</artifactId>
-            <version>2.6.18</version>
-            <scope>provided</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
         <dependency>
