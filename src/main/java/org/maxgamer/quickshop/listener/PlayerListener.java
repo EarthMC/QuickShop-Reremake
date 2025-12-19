@@ -399,6 +399,11 @@ public class PlayerListener extends AbstractQSListener {
             if (!Util.isLoaded(location)) {
                 return;
             }
+            // tradesystem closes its inventories from the global region for some reason, prevent throwing an exception from this side
+            if (!plugin.getServer().isOwnedByCurrentRegion(location)) {
+                return;
+            }
+
             final Shop shop = plugin.getShopManager().getShopIncludeAttached(location);
             if (shop != null) {
                 shop.setSignText();
